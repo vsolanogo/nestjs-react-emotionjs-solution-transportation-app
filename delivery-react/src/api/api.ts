@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const apiUrl = "https://api.mulhollandbot.com"; 
-const apiUrl = "/api"; 
+// const apiUrl = "https://api.mulhollandbot.com";
+const apiUrl = "/api";
 
 const urls = {
   shops: `${apiUrl}/shop`,
@@ -10,6 +10,7 @@ const urls = {
   users: `${apiUrl}/user`,
   userOrders: (userId: number) => `${apiUrl}/user/${userId}/orders`,
   order: `${apiUrl}/order`,
+  orderHistory: `${apiUrl}/order/history`,
 };
 
 export const ShopApi = {
@@ -39,5 +40,8 @@ export const OrdersApi = {
   },
   getByUserId(userId) {
     return axios.get(urls.userOrders(userId));
+  },
+  getByContactInfo(body) {
+    return axios.post(urls.orderHistory, body);
   },
 };

@@ -12,7 +12,7 @@ import { User } from '../user/user.entity';
 import { OrderItem } from '../order-item/order-item.entity';
 import { DataSource } from 'typeorm';
 import { validate } from 'class-validator';
-
+import { GetByContactOrderDto } from './dto/order.dto';
 @Injectable()
 export class OrderService {
   constructor(
@@ -40,6 +40,34 @@ export class OrderService {
     }
 
     return order;
+  }
+
+  async getByContactInfo(
+    getByContactOrderDto: GetByContactOrderDto,
+  ): Promise<Order[]> | null {
+    const query = this.userRepository.createQueryBuilder('user');
+    query.where('user.phone = :phone OR user.email = :email', {
+      phone: getByContactOrderDto.phone,
+      email: getByContactOrderDto.email,
+    });
+
+    const user = await query.getOne();
+
+    if (!user || !Object.keys(getByContactOrderDto).length) {
+      throw new NotFoundException(`User not found`);
+    }
+
+    const orders = await this.orderRepository.find({
+      relations: [
+        'orderItems',
+        'orderItems.product',
+        'orderItems.product.shop',
+        'user',
+      ],
+      where: { user: { id: user.id } },
+    });
+
+    return orders;
   }
 
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
@@ -96,10 +124,10 @@ export class OrderService {
         throw new BadRequestException(errors);
       }
 
-      const res3 = await queryRunner.manager.save(order);
+      const res = await queryRunner.manager.save(order);
 
       await queryRunner.commitTransaction();
-      return res3;
+      return res;
     } catch (error) {
       await queryRunner.rollbackTransaction();
 

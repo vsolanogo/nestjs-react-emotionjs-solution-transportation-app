@@ -33,11 +33,26 @@ export enum DeliveryActions {
   ORDER_CREATE_START = "delivery/order/Create/start",
   ORDER_CREATE_SUCCESS = "delivery/order/Create/success",
   ORDER_CREATE_ERROR = "delivery/order/Create/error",
+
+  LOAD_HISTORY_ORDERS_START = "delivery/historyOrders/Load/start",
+  LOAD_HISTORY_ORDERS_SUCCESS = "delivery/historyOrders/Load/success",
+  LOAD_HISTORY_ORDERS_ERROR = "delivery/historyOrders/Load/Error",
 }
 
 const createPlainAction = (type) => (payload?) => ({ type, payload });
 
 export const loadAppAction = createPlainAction(DeliveryActions.LOAD_APP);
+
+export const loadHistoryOrdersStartAction = createPlainAction(
+  DeliveryActions.LOAD_HISTORY_ORDERS_START
+);
+export const loadHistoryOrdersSuccessAction = createPlainAction(
+  DeliveryActions.LOAD_HISTORY_ORDERS_SUCCESS
+);
+
+export const loadHistoryOrdersErrorAction = createPlainAction(
+  DeliveryActions.LOAD_HISTORY_ORDERS_ERROR
+);
 
 export const loadShopsStartAction = createPlainAction(
   DeliveryActions.LOAD_SHOPS_START
@@ -77,6 +92,20 @@ export const phoneUpdateAction = createPlainAction(
 export const addressUpdateAction = createPlainAction(
   DeliveryActions.ADDRESS_UPDATE
 );
+
+export const loadHistoryOrdersOperation =
+  (body): AppThunkAction<Promise<void>> =>
+  async (dispatch) => {
+    dispatch(loadHistoryOrdersStartAction());
+
+    try {
+      const res = await OrdersApi.getByContactInfo(body);
+
+      await dispatch(loadHistoryOrdersSuccessAction(res.data));
+    } catch (error: any) {
+      dispatch(loadHistoryOrdersErrorAction(error?.response?.data ?? error));
+    }
+  };
 
 export const loadAppOperation =
   (): AppThunkAction<Promise<void>> => async (dispatch) => {
@@ -197,7 +226,6 @@ export const createOrderOperation =
         quantity: parseInt(i.quantity),
         productId: i.product.id,
       }));
-    console.log({ cartShopItems });
 
     const orderDto = { userId: user?.id, orderItems: orderItems };
 

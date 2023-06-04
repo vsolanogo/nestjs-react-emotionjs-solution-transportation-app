@@ -26,6 +26,10 @@ export const Header: React.FC = (): JSX.Element => {
               <Button>Shopping cart</Button>
             </Link>
           </Badge>
+
+          <Link href={`/history`}>
+            <Button>History</Button>
+          </Link>
         </ButtonGroup>
       </Toolbar>
     </AppBar>

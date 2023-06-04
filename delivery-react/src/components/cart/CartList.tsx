@@ -134,7 +134,6 @@ export const CartList: React.FC = (): JSX.Element => {
 
               <ProductsCartLayout>
                 {i.cart.map((j) => {
-                  console.log({ j });
                   return (
                     <CartItemComponent key={j.product.id} id={j.product.id} />
                   );

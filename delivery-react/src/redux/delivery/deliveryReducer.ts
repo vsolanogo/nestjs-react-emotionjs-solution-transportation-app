@@ -12,6 +12,8 @@ export interface DeliveryState {
   phone: string;
   address: string;
   userError: string | null;
+  historyOrders: Array<Order>;
+  historyOrdersError: string | null;
 }
 
 export const initialState: DeliveryState = {
@@ -24,14 +26,43 @@ export const initialState: DeliveryState = {
   phone: "",
   address: "",
   userError: null,
+  historyOrders: [],
+  historyOrdersError: null,
 };
 
 export function deliveryReducer(
   state: DeliveryState = initialState,
   action: AnyAction = { type: null, payload: null }
 ) {
-
   switch (action.type) {
+    case DeliveryActions.LOAD_HISTORY_ORDERS_START:
+      return {
+        ...state,
+        historyOrders: [],
+        historyOrdersError: null,
+      };
+
+    case DeliveryActions.LOAD_HISTORY_ORDERS_SUCCESS:
+      return {
+        ...state,
+        historyOrders: action.payload,
+        historyOrdersError: null,
+      };
+
+    case DeliveryActions.LOAD_HISTORY_ORDERS_ERROR:
+      return {
+        ...state,
+        historyOrders: [],
+        historyOrdersError: action.payload,
+      };
+
+    case DeliveryActions.LOAD_PRODUCTS_ERROR:
+      return {
+        ...state,
+        historyOrders: [],
+        historyOrdersError: action.payload,
+      };
+
     case DeliveryActions.ORDER_CREATE_START:
       return {
         ...state,

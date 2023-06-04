@@ -14,8 +14,6 @@ export function cartReducer(
   state: CartState = initialState,
   action: AnyAction = { type: null, payload: null }
 ) {
-  console.log(action);
-
   switch (action.type) {
     case CartActions.CART_REMOVE_ITEMS_LIST:
       return {

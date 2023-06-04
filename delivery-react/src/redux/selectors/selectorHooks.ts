@@ -1,6 +1,6 @@
 import { createSelector } from "reselect";
 import { useAppSelector } from "../../store/store";
-import { Shop, Product, Cart, User } from "../../models/DeliveryModels";
+import { Shop, Product, Cart, User, Order } from "../../models/DeliveryModels";
 import {
   selectShopsList,
   selectProductsList,
@@ -13,6 +13,8 @@ import {
   selectUser,
   selectOrder,
   selectReduxMainState,
+  selectOrdersHistoryError,
+  selectHistoryOrders,
 } from "./selectors";
 
 export const useReduxMainState = (): any =>
@@ -47,3 +49,9 @@ export const useCartShops = (): Array<Shop> =>
 
 export const useCartShopsWithCartItems = (): Array<any> =>
   useAppSelector(createSelector(selectCartShopsWithCartItems, (i) => i));
+
+export const useOrdersHistoryError = (): string | null =>
+  useAppSelector(createSelector(selectOrdersHistoryError, (i) => i));
+
+export const useHistoryOrders = (): Array<Order> =>
+  useAppSelector(createSelector(selectHistoryOrders, (i) => i));

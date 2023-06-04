@@ -39,7 +39,7 @@ export const selectCartShopsWithCartItems = (state) => {
       .map((i) => cart[i])
       .filter((i) => i.shopId === j.id)
       .map((i) => i.product.price * i.quantity)
-      .reduce(function (a, b) {
+      .reduce((a, b) => {
         return a + b;
       }, 0),
   }));
@@ -59,6 +59,14 @@ export const selectUserType = (state) => {
 
 export const selectUserError = (state) => {
   return selectDeliveryState(state)?.userError ?? null;
+};
+
+export const selectOrdersHistoryError = (state) => {
+  return selectDeliveryState(state)?.historyOrdersError ?? null;
+};
+
+export const selectHistoryOrders = (state) => {
+  return selectDeliveryState(state)?.historyOrders ?? [];
 };
 
 export const selectUser = (state) => selectDeliveryState(state)?.user ?? null;
