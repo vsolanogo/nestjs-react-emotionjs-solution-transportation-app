@@ -18,4 +18,12 @@ export class CreateOrderDto {
   @ArrayUnique((i: CreateOrderItemDto) => i.productId)
   @ValidateNested({ each: true })
   orderItems: CreateOrderItemDto[];
+
+  @IsNumber()
+  @IsNotEmpty()
+  latitude: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  longitude: number;
 }

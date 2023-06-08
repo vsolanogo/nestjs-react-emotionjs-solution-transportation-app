@@ -8,6 +8,27 @@ import { ShopService } from '../shop/shop.service';
 import { ProductService } from '../product/product.service';
 import { OrderService } from '../order/order.service';
 import { UserService } from '../user/user.service';
+import { locationsLA } from './locationsLA';
+
+function getLocation() {
+  var n = 0;
+  return {
+    getLocation: function () {
+      n++;
+
+      const regex = /\(([^,]+), ([^)]+)\)/;
+
+      const match = locationsLA[n].match(regex);
+
+      const latitude = parseFloat(match[1]);
+      const longitude = parseFloat(match[2]);
+
+      return { latitude, longitude };
+    },
+  };
+}
+
+const location = getLocation();
 
 @Injectable()
 export class DataSeedService {
@@ -22,8 +43,12 @@ export class DataSeedService {
     const shopsList: Array<Shop> = [];
 
     for (let i = 0; i < 4; i++) {
+      const { latitude, longitude } = location.getLocation();
+
       const res = await this.shopService.create({
         shopName: faker.company.name(),
+        latitude,
+        longitude,
       });
 
       shopsList.push(res);
@@ -73,9 +98,13 @@ export class DataSeedService {
           quantity: faker.number.int({ min: 1, max: 10 }),
         }));
 
+        const { latitude, longitude } = location.getLocation();
+
         const res = await this.orderService.create({
           userId: usersList[j].id,
           orderItems: randomOrderItems,
+          latitude,
+          longitude,
         });
       }
     }

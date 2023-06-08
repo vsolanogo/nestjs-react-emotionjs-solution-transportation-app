@@ -126,3 +126,16 @@ export const ENote = styled.div`
     grid-template-columns: repeat(5, 1fr) repeat(4, minmax(5em, max-content));
   }
 `;
+
+
+export const SharedModalBackground = styled.div`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  opacity: 0.5;
+  z-index: 1200;
+  max-width: 100%;
+  left: 0;
+  top: 0;
+`

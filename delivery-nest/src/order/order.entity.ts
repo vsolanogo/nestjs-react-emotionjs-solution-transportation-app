@@ -6,6 +6,7 @@ import {
   OneToMany,
   ManyToOne,
   JoinColumn,
+  Column,
 } from 'typeorm';
 import { User } from '../user/user.entity';
 import { OrderItem } from '../order-item/order-item.entity';
@@ -26,4 +27,10 @@ export class Order {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column({ type: 'decimal', precision: 10, scale: 8 }) 
+  latitude: number;
+
+  @Column({ type: 'decimal', precision: 11, scale: 8 }) 
+  longitude: number;
 }

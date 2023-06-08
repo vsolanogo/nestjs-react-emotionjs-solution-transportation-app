@@ -5,7 +5,9 @@ import {
   selectUserError,
   selectUser,
   selectCartShopsWithCartItems,
+  selectOrderGeometry,
 } from "../selectors/selectors";
+import { AddressGeometry } from "../../models/DeliveryModels";
 
 import { cartRemoveItemsListAction } from "../cart/cartActions";
 
@@ -37,11 +39,17 @@ export enum DeliveryActions {
   LOAD_HISTORY_ORDERS_START = "delivery/historyOrders/Load/start",
   LOAD_HISTORY_ORDERS_SUCCESS = "delivery/historyOrders/Load/success",
   LOAD_HISTORY_ORDERS_ERROR = "delivery/historyOrders/Load/Error",
+
+  ADDRESS_GEOMETRY_UPDATE = "delivery/cart/address/geometry",
 }
 
 const createPlainAction = (type) => (payload?) => ({ type, payload });
 
 export const loadAppAction = createPlainAction(DeliveryActions.LOAD_APP);
+
+export const addressAddressGeometryUpdateAction = createPlainAction(
+  DeliveryActions.ADDRESS_GEOMETRY_UPDATE
+);
 
 export const loadHistoryOrdersStartAction = createPlainAction(
   DeliveryActions.LOAD_HISTORY_ORDERS_START
@@ -227,7 +235,14 @@ export const createOrderOperation =
         productId: i.product.id,
       }));
 
-    const orderDto = { userId: user?.id, orderItems: orderItems };
+    const orderGeometry: AddressGeometry = selectOrderGeometry(state);
+
+    const orderDto = {
+      userId: user?.id,
+      orderItems: orderItems,
+      latitude: orderGeometry.latitude,
+      longitude: orderGeometry.longitude,
+    };
 
     dispatch(createOrderStartAction());
 

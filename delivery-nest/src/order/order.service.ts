@@ -88,6 +88,8 @@ export class OrderService {
     }
 
     order.user = user;
+    order.latitude = createOrderDto.latitude;
+    order.longitude = createOrderDto.longitude;
 
     try {
       for await (const item of createOrderDto.orderItems) {

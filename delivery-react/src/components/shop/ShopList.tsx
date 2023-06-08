@@ -12,8 +12,8 @@ export const ShopList: React.FC = (): JSX.Element => {
   return (
     <MenuList>
       {shops.map((i) => (
-        <Link href={`/shop/${i.id}`}>
-          <MenuItem key={i.id}>
+        <Link href={`/shop/${i.id}`} key={i.id}>
+          <MenuItem>
             <ListItem>{i.shopName}</ListItem>
             <Divider />
           </MenuItem>

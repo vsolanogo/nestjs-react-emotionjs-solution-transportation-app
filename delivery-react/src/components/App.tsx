@@ -10,7 +10,7 @@ export const App = () => {
 
   const i = useReduxMainState();
 
-  console.log(i);
+  // console.log(i);
 
   React.useEffect(() => {
     dispatch(loadAppOperation());

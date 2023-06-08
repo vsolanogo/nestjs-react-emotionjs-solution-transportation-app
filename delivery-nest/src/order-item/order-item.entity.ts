@@ -33,5 +33,5 @@ export class OrderItem {
   createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt: Date; 
 }

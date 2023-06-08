@@ -17,6 +17,8 @@ const testShopPost = (str = undefined) =>
     .post('/shop')
     .send({
       shopName: str ? str : shopName,
+      latitude: 33.942,
+      longitude: -118.2717,
     })
     .expect(201);
 
@@ -29,6 +31,8 @@ const testProductPost = (shopid: number) =>
       calories: randomCalories,
       image: randomImage,
       shop: shopid,
+      latitude: 33.9829,
+      longitude: -118.3338,
     })
     .expect(201)
     .then((res) => {
@@ -74,12 +78,19 @@ interface OrderItemsProps {
   quantity: number;
 }
 
-const testOrderPost = (userId: number, orderItems: Array<OrderItemsProps>) => {
+const testOrderPost = (
+  userId: number,
+  orderItems: Array<OrderItemsProps>,
+  latitude: number,
+  longitude: number,
+) => {
   return request(app.getHttpServer())
     .post('/order')
     .send({
       userId,
       orderItems,
+      latitude,
+      longitude,
     })
     .expect(201)
     .then((res) => {
@@ -180,9 +191,14 @@ describe('Product (e2e)', () => {
     await testEmailPost('testmail@gmail.com');
     await testEmailPost('testmail2@gmail.com');
 
-    await testOrderPost(1, [
-      { productId: 1, quantity: 3 },
-      { productId: 2, quantity: 1 },
-    ]);
+    await testOrderPost(
+      1,
+      [
+        { productId: 1, quantity: 3 },
+        { productId: 2, quantity: 1 },
+      ],
+      34.0454,
+      -118.3157,
+    );
   });
 });

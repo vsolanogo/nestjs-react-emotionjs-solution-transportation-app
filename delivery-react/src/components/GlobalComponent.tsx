@@ -22,6 +22,10 @@ export const GlobalComponent = () => {
           input {
             font: inherit;
           }
+
+          .pac-container {
+            z-index: 10000 !important;
+          }
         `}
       />
     </>

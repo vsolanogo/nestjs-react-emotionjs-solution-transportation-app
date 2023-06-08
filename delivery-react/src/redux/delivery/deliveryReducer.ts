@@ -1,6 +1,12 @@
 import { AnyAction } from "redux";
 import { DeliveryActions } from "./deliveryActions";
-import { Shop, Product, Order, User } from "../../models/DeliveryModels";
+import {
+  Shop,
+  Product,
+  Order,
+  User,
+  AddressGeometry,
+} from "../../models/DeliveryModels";
 
 export interface DeliveryState {
   shop: Array<Shop>;
@@ -14,6 +20,7 @@ export interface DeliveryState {
   userError: string | null;
   historyOrders: Array<Order>;
   historyOrdersError: string | null;
+  addressGeometry: AddressGeometry | null;
 }
 
 export const initialState: DeliveryState = {
@@ -28,6 +35,7 @@ export const initialState: DeliveryState = {
   userError: null,
   historyOrders: [],
   historyOrdersError: null,
+  addressGeometry: null,
 };
 
 export function deliveryReducer(
@@ -35,6 +43,12 @@ export function deliveryReducer(
   action: AnyAction = { type: null, payload: null }
 ) {
   switch (action.type) {
+    case DeliveryActions.ADDRESS_GEOMETRY_UPDATE:
+      return {
+        ...state,
+        addressGeometry: action.payload,
+      };
+
     case DeliveryActions.LOAD_HISTORY_ORDERS_START:
       return {
         ...state,

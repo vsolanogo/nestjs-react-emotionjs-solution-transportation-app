@@ -45,6 +45,8 @@ export class ShopService {
   async create(createShopDto: CreateShopDto): Promise<Shop> {
     const shop = new Shop();
     shop.shopName = createShopDto.shopName;
+    shop.latitude = createShopDto.latitude;
+    shop.longitude = createShopDto.longitude;
     return this.shopRepository.save(shop).catch((e) => {
       if (e.code === 'ER_DUP_ENTRY') {
         throw new BadRequestException('Shop already exists.');

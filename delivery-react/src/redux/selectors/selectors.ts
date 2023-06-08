@@ -51,11 +51,20 @@ export const selectUserType = (state) => {
     userName: delivery.userName,
     phone: delivery.phone,
     email: delivery.email,
-    address: delivery.address,
+    address: JSON.stringify(delivery.addressGeometry || delivery.address),
   };
 
   return user;
 };
+
+export const selectOrderGeometry = (state) => {
+  return selectDeliveryState(state)?.addressGeometry ?? null;
+};
+
+export const selectOrderAddress = (state) => {
+  return selectDeliveryState(state)?.address ?? null;
+};
+
 
 export const selectUserError = (state) => {
   return selectDeliveryState(state)?.userError ?? null;

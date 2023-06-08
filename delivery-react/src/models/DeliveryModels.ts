@@ -1,11 +1,15 @@
-export interface OrderDto  {
-  userId: number, 
-  orderItems: Array<OrderItemDto>,
+export interface AddressGeometry {
+  latitude: number;
+  longitude: number;
+}
+export interface OrderDto {
+  userId: number;
+  orderItems: Array<OrderItemDto>;
 }
 
-export interface OrderItemDto  {
-  productId: number, 
-  quantity: number,
+export interface OrderItemDto {
+  productId: number;
+  quantity: number;
 }
 
 export interface Cart {
@@ -14,6 +18,8 @@ export interface Cart {
 export interface Shop {
   id: number;
   shopName: string;
+  latitude: number;
+  longitude: number;
 }
 
 export interface Product {
@@ -48,6 +54,8 @@ export interface Order {
   orderItems: OrderItem[];
   createdAt: Date;
   updatedAt: Date;
+  latitude: number;
+  longitude: number;
 }
 
 export interface User {
