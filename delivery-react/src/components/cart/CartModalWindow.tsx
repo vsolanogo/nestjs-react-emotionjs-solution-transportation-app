@@ -163,7 +163,6 @@ export const CartModalWindow: React.FC<CartModalWindowProps> = ({
 
   const handleErrorClose = () => {
     dispatch(userDeleteErrorAction());
-    onWindowClose();
   };
 
   const handleOrderClose = () => {
