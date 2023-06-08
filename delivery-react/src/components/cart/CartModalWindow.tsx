@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { css } from "@emotion/react";
 import { SharedModalBackground } from "../shared";
 import styled from "@emotion/styled";
 import Button from "@mui/material/Button";
