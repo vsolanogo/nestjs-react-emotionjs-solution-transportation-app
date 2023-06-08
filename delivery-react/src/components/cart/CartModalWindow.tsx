@@ -26,6 +26,7 @@ import {
 import { Shop } from "../../models/DeliveryModels";
 import { Loader } from "@googlemaps/js-api-loader";
 import { faBasketShopping } from "@fortawesome/free-solid-svg-icons";
+import Typography from "@mui/joy/Typography";
 
 const EModal = styled.div`
   min-width: 15em;
@@ -132,9 +133,52 @@ export const CartModalWindow: React.FC<CartModalWindowProps> = ({
   const [clickedPlace, setClickedPlace] = useState<google.maps.LatLng | null>(
     null
   );
+  const [distance, setDistance] = useState<number | null>(null);
+  const [duration, setDuration] = useState<number | null>(null);
 
   const autoCompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if ((clickedPlace || selectedPlace) && theShop) {
+      const distanceMatrixService = new google.maps.DistanceMatrixService();
+
+      const origins = [
+        new google.maps.LatLng(theShop.latitude, theShop.longitude),
+      ];
+      const destinations = selectedPlace
+        ? [
+            new google.maps.LatLng(
+              selectedPlace?.geometry?.location?.lat() || 0,
+              selectedPlace?.geometry?.location?.lng() || 0
+            ),
+          ]
+        : [
+            new google.maps.LatLng(
+              clickedPlace?.lat() || 0,
+              clickedPlace?.lng()
+            ) || 0,
+          ];
+
+      distanceMatrixService.getDistanceMatrix(
+        {
+          origins,
+          destinations,
+          travelMode: google.maps.TravelMode.DRIVING,
+        },
+        (response) => {
+          if (response?.rows[0].elements[0].status === "OK") {
+            const durationValue = response.rows[0].elements[0].duration.value;
+            const distanceValue = response.rows[0].elements[0].distance.value;
+            setDistance(distanceValue);
+            setDuration(durationValue);
+          } else {
+            setDistance(null);
+          }
+        }
+      );
+    }
+  }, [selectedPlace, theShop, clickedPlace]);
 
   const handleConfirmOrder = (id) => {
     const dispatchAsync = async () => {
@@ -371,6 +415,18 @@ export const CartModalWindow: React.FC<CartModalWindowProps> = ({
                 inputRef={inputRef}
               />
             </div>
+
+            {distance && (
+              <Typography level="h2" fontSize="md" sx={{ mb: 0.5 }}>
+                {distance / 1000} km
+              </Typography>
+            )}
+
+            {duration && (
+              <Typography level="h2" fontSize="md" sx={{ mb: 0.5 }}>
+                {duration / 100} minutes
+              </Typography>
+            )}
           </Box>
 
           <div
@@ -395,87 +451,3 @@ export const CartModalWindow: React.FC<CartModalWindowProps> = ({
     </>
   );
 };
-
-// const we = {
-//   address_components: [
-//     {
-//       long_name: "Hollywood",
-//       short_name: "Hollywood",
-//       types: ["locality", "political"],
-//     },
-//     {
-//       long_name: "Broward County",
-//       short_name: "Broward County",
-//       types: ["administrative_area_level_2", "political"],
-//     },
-//     {
-//       long_name: "Florida",
-//       short_name: "FL",
-//       types: ["administrative_area_level_1", "political"],
-//     },
-//     {
-//       long_name: "United States",
-//       short_name: "US",
-//       types: ["country", "political"],
-//     },
-//   ],
-//   geometry: {
-//     location: { lat: 26.0112014, lng: -80.1494901 },
-//     viewport: {
-//       south: 25.98616792898462,
-//       west: -80.24869005513406,
-//       north: 26.09306387378846,
-//       east: -80.10206591571134,
-//     },
-//   },
-//   icon: "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/geocode-71.png",
-//   name: "Hollywood",
-//   html_attributions: [],
-// };
-
-// const wewe = {
-//   address_components: [
-//     { long_name: "Unit 1", short_name: "Unit 1", types: ["subpremise"] },
-//     { long_name: "15210", short_name: "15210", types: ["street_number"] },
-//     { long_name: "East 6th Avenue", short_name: "E 6th Ave", types: ["route"] },
-//     {
-//       long_name: "City Center North",
-//       short_name: "City Center North",
-//       types: ["neighborhood", "political"],
-//     },
-//     {
-//       long_name: "Aurora",
-//       short_name: "Aurora",
-//       types: ["locality", "political"],
-//     },
-//     {
-//       long_name: "Arapahoe County",
-//       short_name: "Arapahoe County",
-//       types: ["administrative_area_level_2", "political"],
-//     },
-//     {
-//       long_name: "Colorado",
-//       short_name: "CO",
-//       types: ["administrative_area_level_1", "political"],
-//     },
-//     {
-//       long_name: "United States",
-//       short_name: "US",
-//       types: ["country", "political"],
-//     },
-//     { long_name: "80011", short_name: "80011", types: ["postal_code"] },
-//     { long_name: "8831", short_name: "8831", types: ["postal_code_suffix"] },
-//   ],
-//   geometry: {
-//     location: { lat: 39.7247771, lng: -104.812572 },
-//     viewport: {
-//       south: 39.7234630197085,
-//       west: -104.8138697802915,
-//       north: 39.7261609802915,
-//       east: -104.8111718197085,
-//     },
-//   },
-//   icon: "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
-//   name: "231 Buckley Club (AA/NA MEETINGS)",
-//   html_attributions: [],
-// };
