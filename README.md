@@ -1,4 +1,3 @@
-The app is deployed at https://delivery.mulhollandbot.com/
 
 1. To run the app, first install the necessary `node_modules` for React. Then, execute the command `docker-compose up` to start the backend part.
 
