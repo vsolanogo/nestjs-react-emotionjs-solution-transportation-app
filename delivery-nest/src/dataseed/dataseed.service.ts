@@ -9,11 +9,15 @@ import { ProductService } from '../product/product.service';
 import { OrderService } from '../order/order.service';
 import { UserService } from '../user/user.service';
 import { locationsLA } from './locationsLA';
+import { v4 as uuidv4 } from 'uuid';
 
 function getLocation() {
-  var n = 0;
+  let n = 0;
   return {
     getLocation: function () {
+      if (n > 800) {
+        n = 0;
+      }
       n++;
 
       const regex = /\(([^,]+), ([^)]+)\)/;
@@ -75,15 +79,20 @@ export class DataSeedService {
 
     const usersList: Array<User> = [];
 
-    for (let i = 0; i < 3; i++) {
-      const res = await this.userService.create({
-        userName: faker.internet.displayName(),
-        phone: faker.phone.number(),
-        email: faker.internet.email(),
-        address: faker.location.streetAddress(),
-      });
+    for (let j = 0; j < 5; j++) {
+      const userBatchPromises = [];
+      for (let i = 0; i < 100; i++) {
+        const promise = this.userService.create({
+          userName: faker.internet.displayName(),
+          phone: faker.phone.number(),
+          email: `${uuidv4()}@gmail.com`,
+          address: faker.location.streetAddress(),
+        });
+        userBatchPromises.push(promise);
+      }
+      const batchResults = await Promise.all(userBatchPromises);
 
-      usersList.push(res);
+      usersList.push(...batchResults);
     }
 
     for (let i = 0; i < shopsList.length; i++) {
