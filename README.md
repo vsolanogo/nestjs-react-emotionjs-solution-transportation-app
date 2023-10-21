@@ -5,3 +5,4 @@
 
 3. If you don't have Docker, ensure that PostgreSQL is installed on your system and that a database named "delivery" has been created with the username `postgres` and the password `1111`. Next, navigate to the `delivery-nest` directory and run the command `npm run start`.
 
+![db](db.png)
